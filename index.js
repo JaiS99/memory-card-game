@@ -2,7 +2,7 @@ const gridContainer = document.querySelector(".grid-container");
 let cards = [];
 let firstCard, secondCard;
 let lockBoard = false;
-let score = 0;
+let score = 100;
 
 document.querySelector(".score").textContent = score;
 
@@ -53,18 +53,34 @@ function flipCard() {
     firstCard = this;
     return;
   }
-
   secondCard = this;
-  score++;
   document.querySelector(".score").textContent = score;
   lockBoard = true;
-
   checkForMatch();
+}
+
+function checkWin() {
+  const flippedCards = document.querySelectorAll(".card.flipped");
+  return flippedCards.length === cards.length;
 }
 
 function checkForMatch() {
   let isMatch = firstCard.dataset.name === secondCard.dataset.name;
-
+  if (isMatch) {
+    score += 20;
+    document.querySelector(".score").textContent = score;
+  } else {
+    score--;
+    document.querySelector(".score").textContent = score;
+  }
+  if (checkWin()) {
+    setTimeout(() => {
+      alert(`You Won with High Score! Your score is ${score}.`);
+    }, 500);
+  } else {
+    score--;
+    document.querySelector(".score").textContent = score;
+  }
   isMatch ? disableCards() : unflipCards();
 }
 
